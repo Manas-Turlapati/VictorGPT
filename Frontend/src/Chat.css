@@ -1,0 +1,78 @@
+.userDiv p{
+    color:white;
+   
+}
+.userDiv{
+    display:flex;
+    justify-content: flex-end;
+}
+.gptDiv p{
+    color:white;
+}
+.gptDiv{
+    text-align:left;
+    font-size:0.9rem;
+}
+.chats {
+    max-width: 700px;       /* give it a fixed height so scroll actually works */
+    overflow-y: scroll;
+    padding: 2rem;          /* 8rem is very large, 2rem looks cleaner */
+    scrollbar-width: thin;
+    scrollbar-color: #4a4a4a transparent;
+
+}
+.userMessage{
+    background-color: #323232;
+    padding:10px 20px;
+    border-radius:14px;
+    margin-left:15rem;
+    max-width: 500px;
+    width:fit-content;
+}
+.gptMessage {
+    color: white;
+    width: 100%;        
+    max-width: 700px;
+    word-wrap: break-word;
+    width:fit-content;
+}
+
+.gptMessage pre {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0.5rem 0;
+}
+
+/* THE KEY FIX: display block, never flex */
+.gptMessage pre code {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    white-space: pre;
+    word-break: normal;
+    overflow-wrap: normal;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #e6e6e6;
+    background: transparent;
+    padding: 0;
+}
+
+/* Inline code only */
+.gptMessage code {
+    background-color: #2d2d2d;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.85em;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #e6e6e6;
+}
+.hljs{
+    border-radius: 14px !important; 
+}

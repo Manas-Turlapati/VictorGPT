@@ -1,0 +1,39 @@
+//requiring packages
+const router= require("./routes/chat.js");
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
+const { getGrokResponse }= require("./utils/grokai.js");
+const app = express();
+const PORT = 8080;
+app.use(express.json());
+app.use(cors());
+//connecting mongodb with the terminal 
+let connectDB = async function(){
+    try{
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log("mongodb connected successfully");
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+app.use("/api", router);
+//connecting the port
+
+app.listen(PORT,()=>{
+    console.log(`Server Running on ${PORT}!!`);
+    connectDB();
+});
+
+//post request for calling the open ai or grok api using grok api
+// app.post("/test", async(req,res)=>{
+//   try{
+//     let reply = await getGrokResponse(req.body.content);
+//     res.json({reply:reply});
+//   }
+//   catch(err){
+//     console.log(err);
+//   }
+// });
