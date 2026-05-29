@@ -46,7 +46,7 @@ function Login() {
     <>
       <div className="body">
         <div className="login-form">
-          <h1 style={{ color: greeting ? "white" : "red" }}>
+          <h1 style={{ color: greeting ? "black" : "red" }}>
             {greeting
               ? "Welcome back!Please Login!"
               : "Username or Password is incorrect"}
