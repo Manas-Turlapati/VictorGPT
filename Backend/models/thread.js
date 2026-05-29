@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+
 let messageSchema = new mongoose.Schema({
     role:{
         type:String,
@@ -23,6 +24,11 @@ let threadSchema = new mongoose.Schema({
   title: {
     type: String,
     default: "New Chat",
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   messages: [messageSchema],
   createdAt: {

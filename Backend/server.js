@@ -1,5 +1,6 @@
 //requiring packages
-const router= require("./routes/chat.js");
+const chatRouter= require("./routes/chat.js");
+const userRouter = require("./routes/user.js");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -19,7 +20,8 @@ let connectDB = async function(){
         console.log(err);
     }
 }
-app.use("/api", router);
+app.use("/api", chatRouter);
+app.use("/api",userRouter)
 //connecting the port
 
 app.listen(PORT,()=>{

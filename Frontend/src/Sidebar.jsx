@@ -21,12 +21,21 @@ function Sidebar(){
     threadId,
     setThreadId,
     prevMessages,
-    setprevMessages
+    setprevMessages,
+    pendingTask,
+    setpendingTask,
+    refetch,
+    setRefetch,
   } = useContext(MyContext);
   useEffect(()=>{
     async function fetchData(){
       try{
-        const thread = await fetch("http://localhost:8080/api/thread");
+        const token = localStorage.getItem("token");
+        const thread = await fetch("http://localhost:8080/api/thread", {
+          headers: {
+            authorization: `Bearer ${token}`, // ← send token
+          },
+        });
         const res = await thread.json();
         if(res&&res.data){
           setThreads(res.data);
@@ -38,19 +47,23 @@ function Sidebar(){
 
     }
     fetchData();
-  },[reply])
+  },[refetch])
   async function displayInfo(threadId){
+    setpendingTask("");
     setcurrThread(threadId);
     setprevMessages([]);
-    setReply("");
-    try{
-      const res = await fetch(`http://localhost:8080/api/thread/${threadId}`);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://localhost:8080/api/thread/${threadId}`, {
+        headers: {
+          "authorization": `Bearer ${token}`,
+        },
+      });
       const arr = await res.json();
       setprevMessages(arr.data.messages);
       setview(true);
       setnewChat(false);
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
     }
   }
@@ -64,9 +77,13 @@ function Sidebar(){
   }
   async function deleteThread(threadId){
     try{
+      const token = localStorage.getItem("token");
       const res = await fetch(`http://localhost:8080/api/thread/${threadId}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `Bearer ${token}`,
+        },
       });
       setThreads((prev) => prev.filter((t) => t.threadId !== threadId));
     }
@@ -88,7 +105,7 @@ function Sidebar(){
             <ul className="history">
               {threads.map((el, idx) => {
                 return (
-                  <li key={el._id}>
+                  <li key={el.threadId}>
                     <span onClick={() => displayInfo(el.threadId)}>
                       {el.title}
                     </span>
@@ -114,3 +131,4 @@ function Sidebar(){
   );
 }
 export default Sidebar;
+

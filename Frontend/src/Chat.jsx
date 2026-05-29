@@ -8,9 +8,10 @@ import { faUnderline } from "@fortawesome/free-solid-svg-icons";
 function Chat(){
     const {newChat,prevMessages,reply,setprevMessages, isViewingOldThread,pendingTask
     } = useContext(MyContext);
+    const user = localStorage.username;
     return (
       <> 
-        {newChat && <h1>Start a New Chat!</h1>}
+        {newChat && <h1>Hello! <i>{user}</i> start a new chat!</h1>}
         <div className="chats">
           {prevMessages.map((el, idx) => {
             return (

@@ -1,10 +1,11 @@
 const Thread = require("../models/thread.js");
 const express = require("express");
+const {verifyToken} = require("../middleware.js");
 const router = express.Router();
 const { getGrokResponse } = require("../utils/grokai.js");
-router.get("/thread", async (req, res) => {
+router.get("/thread", verifyToken,async (req, res) => {
   try {
-    const threads = await Thread.find({}).sort({ updatedAt: -1 });
+    const threads = await Thread.find({user:req.user.id}).sort({ updatedAt: -1 });
     if (!threads) return res.status(404).json({ error: "No threads found" });
     res.json({ success: true, data: threads });
   } catch (err) {
@@ -12,18 +13,20 @@ router.get("/thread", async (req, res) => {
   }
 });
 
-router.get("/thread/:threadId", async (req, res) => {
+router.get("/thread/:threadId",verifyToken,async (req, res) => {
   try {
     const tId = req.params.threadId;
-    const thread = await Thread.findOne({ threadId: tId });
+    const thread = await Thread.findOne({
+      threadId: tId, // ← add this
+      user: req.user.id, // ← keep this for security
+    });
     if (!thread) return res.status(404).json({ error: "Thread not found" });
     res.json({ success: true, data: thread });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
-
-router.delete("/thread/:threadId", async (req, res) => {
+router.delete("/thread/:threadId",verifyToken, async (req, res) => {
   try {
     const tId = req.params.threadId;
     const deleted = await Thread.findOneAndDelete({ threadId: tId });
@@ -34,7 +37,7 @@ router.delete("/thread/:threadId", async (req, res) => {
   }
 });
 
-router.post("/chat",async(req,res)=>{
+router.post("/chat",verifyToken,async(req,res)=>{
     let {threadId,message} = req.body;
     try{
         let thread = await Thread.findOne({threadId:threadId});
@@ -42,6 +45,7 @@ router.post("/chat",async(req,res)=>{
             thread = new Thread({
                 threadId : threadId,
                 title:message,
+                user:req.user.id,
                 messages:[{role:"user",content:message}]
             })
         }else{
@@ -74,5 +78,5 @@ router.post("/chat",async(req,res)=>{
 //         console.log(err);
 //     }
 // })
- 
 module.exports = router;
+ 

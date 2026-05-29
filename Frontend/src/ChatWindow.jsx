@@ -31,7 +31,9 @@ function ChatWindow(){
     threadId,
     setThreadId,
     prevMessages,
-    setprevMessages
+    setprevMessages,
+    refetch,
+    setRefetch,
   } = useContext(MyContext);
   const [loading,setLoading] = useState(false);
     let [isopen,setOpen] = useState(false);
@@ -48,27 +50,36 @@ function ChatWindow(){
         setprevMessages([]);
       }  
       try{
+          const token = localStorage.getItem("token");
           const res = await fetch("http://localhost:8080/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            threadId:currthread? currthread:threadId,
-            message:prompt
-          })
-        });
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "authorization": `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              threadId: currthread ? currthread : threadId,
+              message: prompt,
+            }),
+          });
         const data = await res.json();
         setLoading(false);
         setpendingTask(prompt);
         setReply(data.reply);
         setnewChat(false);
         setPrompt("");
+        setRefetch((prev) => prev + 1); 
       }
       catch(err){
         console.log(err);
       }
       setLoading(false);
     }
-    
+    function logout(){
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      window.location.href= "/login";
+    }
     return (
       <>
         <div className="chat-window">
@@ -92,7 +103,7 @@ function ChatWindow(){
                   </div>
                   <div className="icon-item">
                     <FontAwesomeIcon icon={faRightFromBracket} />
-                    <span> Logout</span>
+                    <span onClick={logout}> Logout</span>
                   </div>
                 </div>
               )}
