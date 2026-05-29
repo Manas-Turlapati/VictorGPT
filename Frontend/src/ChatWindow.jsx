@@ -66,6 +66,7 @@ function ChatWindow() {
         },
       );
       const data = await res.json();
+      console.log(data);
       setLoading(false);
       setpendingTask(prompt);
       setReply(data.reply);
