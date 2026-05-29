@@ -1,5 +1,5 @@
 
-# VectorGPT 🤖
+# VictorGPT 🤖
 
 A full-stack ChatGPT clone built with React, Node.js, Express, and MongoDB.
 
