@@ -29,6 +29,10 @@ function Login() {
       //got the token and username store them in local storage
       if(!data.token){
         setGreeting(false);
+        setloginForm({
+          username: "",
+          password: "",
+        });
         return;
       }
       localStorage.setItem("token", data.token); // ← add this
