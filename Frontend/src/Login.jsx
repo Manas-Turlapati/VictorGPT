@@ -46,7 +46,11 @@ function Login() {
     <>
       <div className="body">
         <div className="login-form">
-          <h1>{greeting?"Welcome back!Please Login!":"User not found!Please Register"}</h1>
+          <h1 style={{ color: greeting ? "white" : "red" }}>
+            {greeting
+              ? "Welcome back!Please Login!"
+              : "Username or Password is incorrect"}
+          </h1>
           <label htmlFor="username">Enter Your Username:</label>
           <input
             id="username"
