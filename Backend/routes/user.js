@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-router.post("/auth/register",async(req,res)=>{
+router.post("/register",async(req,res)=>{
     try{
         const {username,email,password} = req.body;
         const existingUser = await User.findOne({username:username});
@@ -24,7 +24,7 @@ router.post("/auth/register",async(req,res)=>{
         res.status(500).json({ error: err.message });
     }   
 })
-router.post("/auth/login",async(req,res)=>{
+router.post("/login",async(req,res)=>{
     try{
         const {username,password} = req.body;
         const existingUser = await User.findOne({username:username});
