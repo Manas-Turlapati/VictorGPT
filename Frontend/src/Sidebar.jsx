@@ -1,12 +1,12 @@
-import './Sidebar.css'
+import "./Sidebar.css";
 import { faOpenai } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import {useState,useEffect,useContext} from 'react';
+import { useState, useEffect, useContext } from "react";
 import { MyContext } from "./MyContext";
 import { v4 as uuidv4 } from "uuid";
-function Sidebar(){
+function Sidebar() {
   const {
     newChat,
     setReply,
@@ -27,38 +27,42 @@ function Sidebar(){
     refetch,
     setRefetch,
   } = useContext(MyContext);
-  useEffect(()=>{
-    async function fetchData(){
-      try{
+  useEffect(() => {
+    async function fetchData() {
+      try {
         const token = localStorage.getItem("token");
-        const thread = await fetch("http://localhost:8080/api/thread", {
-          headers: {
-            authorization: `Bearer ${token}`, // ← send token
+        const thread = await fetch(
+          "https://victorgpt-backend.onrender.com/api/thread",
+          {
+            headers: {
+              authorization: `Bearer ${token}`, // ← send token
+            },
           },
-        });
+        );
         const res = await thread.json();
-        if(res&&res.data){
+        if (res && res.data) {
           setThreads(res.data);
         }
-      }
-      catch(err){
+      } catch (err) {
         console.log(err);
       }
-
     }
     fetchData();
-  },[refetch])
-  async function displayInfo(threadId){
+  }, [refetch]);
+  async function displayInfo(threadId) {
     setpendingTask("");
     setcurrThread(threadId);
     setprevMessages([]);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:8080/api/thread/${threadId}`, {
-        headers: {
-          "authorization": `Bearer ${token}`,
+      const res = await fetch(
+        `https://victorgpt-backend.onrender.com/api/thread/${threadId}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const arr = await res.json();
       setprevMessages(arr.data.messages);
       setview(true);
@@ -67,28 +71,30 @@ function Sidebar(){
       console.log(err);
     }
   }
-  function opennewChat(){
-    setprevMessages([]); 
+  function opennewChat() {
+    setprevMessages([]);
     setReply("");
     setcurrThread("");
     setnewChat(true);
     setview(false);
     setThreadId(uuidv4());
   }
-  async function deleteThread(threadId){
-    try{
+  async function deleteThread(threadId) {
+    try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:8080/api/thread/${threadId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "authorization": `Bearer ${token}`,
+      const res = await fetch(
+        `https://victorgpt-backend.onrender.com/api/thread/${threadId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       setThreads((prev) => prev.filter((t) => t.threadId !== threadId));
-    }
-    catch(err){
-      console.log("error in deleting the thread")
+    } catch (err) {
+      console.log("error in deleting the thread");
     }
   }
   return (
@@ -96,8 +102,8 @@ function Sidebar(){
       <section>
         <button className="info" onClick={opennewChat}>
           <div className="InfoDiv">
-            <FontAwesomeIcon icon={faOpenai} className='logo'/>
-            <FontAwesomeIcon icon={faPenToSquare} className='note'/>
+            <FontAwesomeIcon icon={faOpenai} className="logo" />
+            <FontAwesomeIcon icon={faPenToSquare} className="note" />
           </div>
         </button>
         <div className="history-block">
@@ -114,7 +120,7 @@ function Sidebar(){
                       className="bin"
                       onClick={(e) => {
                         e.stopPropagation(); // ← stops li click from firing
-                        deleteThread(el.threadId)
+                        deleteThread(el.threadId);
                       }}
                     />
                   </li>
@@ -131,4 +137,3 @@ function Sidebar(){
   );
 }
 export default Sidebar;
-
