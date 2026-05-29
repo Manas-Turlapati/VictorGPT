@@ -1,6 +1,7 @@
 import "./Login.css";
 import { useState } from "react";
 function Login() {
+  let [greeting, setGreeting] = useState("Welcome Back! Please Login Here!");
   let [loginform, setloginForm] = useState({
     username: "",
     password: "",
@@ -25,10 +26,9 @@ function Login() {
         },
       );
       const data = await res.json();
-      console.log(data);
       //got the token and username store them in local storage
       if(!data.token){
-        console.log("Usernot Registered");
+        setGreeting("User not Registred!");
         window.location.href="/login";
         return;
       }
@@ -43,7 +43,7 @@ function Login() {
     <>
       <div className="body">
         <div className="login-form">
-          <h1>Welcome Back! Please Login Here!</h1>
+          <h1>{greeting}</h1>
           <label htmlFor="username">Enter Your Username:</label>
           <input
             id="username"
