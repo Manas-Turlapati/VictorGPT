@@ -27,6 +27,10 @@ function Login() {
       const data = await res.json();
       console.log(data);
       //got the token and username store them in local storage
+      if(!data.token){
+        console.log("Usernot Registered");
+        window.location.href="/login";
+      }
       localStorage.setItem("token", data.token); // ← add this
       localStorage.setItem("username", data.username); // ← add this
       window.location.href = "/chat"; //redirect to the /chat page
