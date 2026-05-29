@@ -30,6 +30,7 @@ function Login() {
       if(!data.token){
         console.log("Usernot Registered");
         window.location.href="/login";
+        return;
       }
       localStorage.setItem("token", data.token); // ← add this
       localStorage.setItem("username", data.username); // ← add this
