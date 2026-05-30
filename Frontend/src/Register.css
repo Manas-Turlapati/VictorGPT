@@ -17,12 +17,12 @@
     width: 30rem; 
     border-radius: 12px; 
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); 
-    height:30rem;
+    height:33rem;
 }
 .form h1 { 
     text-align: center; 
     color: #212121; 
-    font-size: 1rem;
+    font-size: 2rem;
 }
 .form label { 
     font-weight: 600; 
