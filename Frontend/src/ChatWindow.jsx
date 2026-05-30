@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import { MyContext } from "./MyContext.jsx";
 import { ScaleLoader } from "react-spinners";
 import { useContext } from "react";
@@ -124,6 +125,9 @@ function ChatWindow() {
 
         <div className="chatInput">
           <div className="inputBox">
+            <div className="phone">
+              <FontAwesomeIcon icon={faMicrophone} />
+            </div>
             <input
               type="text"
               placeholder="Ask Anything"

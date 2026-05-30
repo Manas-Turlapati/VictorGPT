@@ -34,8 +34,7 @@ input {
     color: white;                 
     width: 100%;                  
     padding:20px;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
+    text-align: center;
 }
 .submit{
     color:white;
@@ -43,6 +42,14 @@ input {
     padding:20px;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
+    cursor:pointer;
+}
+.phone{
+    color:white;
+    background-color: #FFFFFF0D;
+    padding:20px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
     cursor:pointer;
 }
 .chatInput{
