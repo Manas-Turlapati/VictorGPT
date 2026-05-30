@@ -1,6 +1,7 @@
 import "./Register.css";
 import { useState } from "react";
 function Register() {
+  const [userExist, setExist] = useState(false);
   let [form, setForm] = useState({
     username: "",
     email: "",
@@ -27,6 +28,15 @@ function Register() {
         },
       );
       const data = await res.json();
+      if (!res.ok) {
+        setExist(true);
+        setForm({
+          username: "",
+          email: "",
+          password: "",
+        });
+        return;
+      }
       setForm({
         username: "",
         email: "",
@@ -41,7 +51,11 @@ function Register() {
     <>
       <div className="body">
         <div className="form">
-          <h1>Hello! Please Register Here!</h1>
+          <h1 style={{ color: userExist ? "red" : "black" }}>
+            {userExist
+              ? "User already Exists! Please Login!"
+              : "Hello! Please Register!"}
+          </h1>
           <label htmlFor="username">Enter Your Username:</label>
           <input
             id="username"
