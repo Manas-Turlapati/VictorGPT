@@ -130,6 +130,7 @@ function ChatWindow() {
       toast.error("Transcription failed. Try again!");
     }
   }
+  
   return (
     <>
       <div className="chat-window">
