@@ -1,4 +1,5 @@
 import "./ChatWindow.css";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -78,16 +79,17 @@ function ChatWindow() {
       setRefetch((prev) => prev + 1);
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong. Try again!");
     }
     setLoading(false);
   }
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    window.location.href = "/login";
-  }
-  {
-
+    toast.success("Logged Out Successfully!")
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 1000);
   }
   function startSpeech(){
     if(!isTalk){
@@ -125,6 +127,7 @@ function ChatWindow() {
     }
     catch(err){
       console.log(err);
+      toast.error("Transcription failed. Try again!");
     }
   }
   return (

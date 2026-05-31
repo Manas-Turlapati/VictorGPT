@@ -1,7 +1,7 @@
 import "./Login.css";
+import toast from "react-hot-toast";
 import { useState } from "react";
 function Login() {
-  const [greeting,setGreeting] = useState(true);
   let [loginform, setloginForm] = useState({
     username: "",
     password: "",
@@ -28,7 +28,7 @@ function Login() {
       const data = await res.json();
       //got the token and username store them in local storage
       if(!data.token){
-        setGreeting(false);
+        toast.error("Username or Password is incorrect!");
         setloginForm({
           username: "",
           password: "",
@@ -37,7 +37,10 @@ function Login() {
       }
       localStorage.setItem("token", data.token); // ← add this
       localStorage.setItem("username", data.username); // ← add this
-      window.location.href = "/chat"; //redirect to the /chat page
+      toast.success("Welcome back!");
+      setTimeout(() => {
+        window.location.href = "/chat";
+      }, 1000);
     } catch (err) {
       console.log(err);
     }
@@ -46,10 +49,8 @@ function Login() {
     <>
       <div className="body">
         <div className="login-form">
-          <h1 style={{ color: greeting ? "black" : "red" }}>
-            {greeting
-              ? "Welcome back!Please Login!"
-              : "Username or Password is incorrect"}
+          <h1>
+            Welcome back!Please Login!
           </h1>
           <label htmlFor="username">Enter Your Username:</label>
           <input

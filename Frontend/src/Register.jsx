@@ -1,7 +1,7 @@
 import "./Register.css";
 import { useState } from "react";
+import toast from "react-hot-toast";
 function Register() {
-  const [userExist, setExist] = useState(false);
   let [form, setForm] = useState({
     username: "",
     email: "",
@@ -29,7 +29,7 @@ function Register() {
       );
       const data = await res.json();
       if (!res.ok) {
-        setExist(true);
+        toast.error("User already exists! Try logging in");
         setForm({
           username: "",
           email: "",
@@ -42,20 +42,20 @@ function Register() {
         email: "",
         password: "",
       });
-      window.location.href = "/login";
+      toast.success("Registered Successfully!");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong. Try again!");
     }
   }
   return (
     <>
       <div className="body">
         <div className="form">
-          <h1 style={{ color: userExist ? "red" : "black" }}>
-            {userExist
-              ? "User already Exists! Please Login!"
-              : "Hello! Please Register!"}
-          </h1>
+          <h1>Hello! Please Register!</h1>
           <label htmlFor="username">Enter Your Username:</label>
           <input
             id="username"

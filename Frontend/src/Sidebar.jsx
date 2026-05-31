@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import "./Sidebar.css";
 import { faOpenai } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,6 +46,7 @@ function Sidebar() {
         }
       } catch (err) {
         console.log(err);
+        toast.error("Failed to load threads!");
       }
     }
     fetchData();
@@ -83,7 +85,7 @@ function Sidebar() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://victorgpt-backend.onrender.com/api/thread/${threadId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/thread/${threadId}`,
         {
           method: "DELETE",
           headers: {
@@ -93,8 +95,10 @@ function Sidebar() {
         },
       );
       setThreads((prev) => prev.filter((t) => t.threadId !== threadId));
+      toast.success("Thread deleted!");
     } catch (err) {
       console.log("error in deleting the thread");
+      toast.error("Failed to delete thread!");
     }
   }
   return (
