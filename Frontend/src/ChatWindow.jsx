@@ -43,7 +43,7 @@ function ChatWindow() {
   } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   let [isopen, setOpen] = useState(false);
-  const [isTalk,setTalk] = useState(false);
+  const [isTalk, setTalk] = useState(false);
   function userClick() {
     setOpen(!isopen);
   }
@@ -86,31 +86,30 @@ function ChatWindow() {
   function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    toast.success("Logged Out Successfully!")
+    toast.success("Logged Out Successfully!");
     setTimeout(() => {
       window.location.href = "/login";
     }, 1000);
   }
-  function startSpeech(){
-    if(!isTalk){
+  function startSpeech() {
+    if (!isTalk) {
       startRecording();
-    }
-    else{
+    } else {
       stopRecording();
     }
-    setTalk(prev=>!prev);
+    setTalk((prev) => !prev);
   }
   useEffect(() => {
-    if(!mediaBlobUrl)return;
+    if (!mediaBlobUrl) return;
     sendAudio(mediaBlobUrl);
   }, [mediaBlobUrl]);
 
-  async function sendAudio(mediaBlobUrl){
-    const response = await fetch(mediaBlobUrl); 
-    const blob = await response.blob(); 
+  async function sendAudio(mediaBlobUrl) {
+    const response = await fetch(mediaBlobUrl);
+    const blob = await response.blob();
     const formData = new FormData();
-    formData.append("audio",blob,"audio.webm");
-    try{
+    formData.append("audio", blob, "audio.webm");
+    try {
       const token = localStorage.getItem("token");
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/transcribe`,
@@ -124,13 +123,12 @@ function ChatWindow() {
       );
       const data = await res.json();
       setPrompt(data.transcript);
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
       toast.error("Transcription failed. Try again!");
     }
   }
-  
+
   return (
     <>
       <div className="chat-window">
@@ -173,7 +171,9 @@ function ChatWindow() {
         <div className="chatInput">
           <div className="inputBox">
             <div className="phone" onClick={startSpeech}>
-              <FontAwesomeIcon icon={isTalk?faMicrophoneSlash:faMicrophone} />
+              <FontAwesomeIcon
+                icon={isTalk ? faMicrophoneSlash : faMicrophone}
+              />
             </div>
             <input
               type="text"
@@ -186,7 +186,7 @@ function ChatWindow() {
             </div>
           </div>
           <p className="alert-info">
-            VectorGPT can make mistakes. Check important info. See Cookie
+            VictorGPT can make mistakes. Check important info. See Cookie
             Preferences.
           </p>
         </div>
