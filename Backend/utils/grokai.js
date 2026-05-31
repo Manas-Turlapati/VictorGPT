@@ -11,7 +11,7 @@ async function getGroqChatCompletion(userContent) {
         content: userContent,
       },
     ],
-    model: "openai/gpt-oss-20b",
+    model: "llama3-70b-8192",
   });
 }
 const getGrokResponse = async(message)=>{

@@ -4,11 +4,10 @@ import Markdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 import "./Chat.css"
-import { faUnderline } from "@fortawesome/free-solid-svg-icons";
 function Chat(){
     const {newChat,prevMessages,reply,setprevMessages, isViewingOldThread,pendingTask
     } = useContext(MyContext);
-    const user = localStorage.username;
+    const user = localStorage.getItem("username");
     return (
       <> 
         {newChat && <h1>Hello! <i>{user}</i> start a new chat!</h1>}
