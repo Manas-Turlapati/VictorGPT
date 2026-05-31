@@ -35,8 +35,8 @@ function Login() {
         });
         return;
       }
-      localStorage.setItem("token", data.token); // ← add this
-      localStorage.setItem("username", data.username); // ← add this
+      localStorage.setItem("token", data.token); 
+      localStorage.setItem("username", data.username); 
       toast.success("Welcome back!");
       setTimeout(() => {
         window.location.href = "/chat";
