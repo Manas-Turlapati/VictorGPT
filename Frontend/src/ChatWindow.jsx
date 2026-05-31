@@ -132,7 +132,7 @@ function ChatWindow() {
       <div className="chat-window">
         <div className="navbar">
           <select name="sigmagpt" id="sigmagpt" className="sigmagpt">
-            <option value="sigmagpt">VectorGPT</option>
+            <option value="sigmagpt">VictorGPT</option>
           </select>
           <div className="user" onClick={userClick}>
             <FontAwesomeIcon icon={faUser} />
