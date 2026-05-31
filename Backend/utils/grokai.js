@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 //grok api calling using docs
 const Groq = require("groq-sdk");
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -21,8 +22,22 @@ const getGrokResponse = async(message)=>{
       return reply;
     }
     catch(err){
-      console.log(err);
+      throw err;
     }
-    
 }
-module.exports = { getGrokResponse };
+const getVoiceResponse = async(audio)=>{
+  try {
+    const transcription = await groq.audio.transcriptions.create({
+      file: fs.createReadStream(audio), // Required path to audio file - replace with your audio file!
+      model: "whisper-large-v3-turbo", // Required model to use for transcription
+      prompt: "Specify context or spelling", // Optional
+      response_format: "json", // Optional
+      language: "en", // Optional
+      temperature: 0.0, // Optional
+    });
+    return transcription.text;
+  } catch (err) {
+    throw err;
+  }
+}
+module.exports = { getGrokResponse,getVoiceResponse};

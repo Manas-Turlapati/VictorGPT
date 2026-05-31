@@ -4,6 +4,8 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { faMicrophone } from "@fortawesome/free-solid-svg-icons";
+import { faMicrophoneSlash } from "@fortawesome/free-solid-svg-icons";
+import { useReactMediaRecorder } from "react-media-recorder";
 import { MyContext } from "./MyContext.jsx";
 import { ScaleLoader } from "react-spinners";
 import { useContext } from "react";
@@ -16,6 +18,8 @@ import {
 //old thread means old messages the name is different
 import Chat from "./Chat.jsx";
 function ChatWindow() {
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+    useReactMediaRecorder({ audio: true });
   const {
     prompt,
     setPrompt,
@@ -38,6 +42,7 @@ function ChatWindow() {
   } = useContext(MyContext);
   const [loading, setLoading] = useState(false);
   let [isopen, setOpen] = useState(false);
+  const [isTalk,setTalk] = useState(false);
   function userClick() {
     setOpen(!isopen);
   }
@@ -84,6 +89,47 @@ function ChatWindow() {
     localStorage.removeItem("username");
     window.location.href = "/login";
   }
+  {
+
+  }
+  function startSpeech(){
+    if(!isTalk){
+      startRecording();
+    }
+    else{
+      stopRecording();
+    }
+    setTalk(prev=>!prev);
+  }
+  useEffect(() => {
+    if(!mediaBlobUrl)return;
+    sendAudio(mediaBlobUrl);
+  }, [mediaBlobUrl]);
+
+  async function sendAudio(mediaBlobUrl){
+    const response = await fetch(mediaBlobUrl); 
+    const blob = await response.blob(); 
+    const formData = new FormData();
+    formData.append("audio",blob,"audio.webm");
+    try{
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        "http://localhost:8080/api/transcribe",
+        {
+          method: "POST",
+          headers: {
+            "authorization": `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
+      const data = await res.json();
+      setPrompt(data.transcript);
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
   return (
     <>
       <div className="chat-window">
@@ -125,8 +171,8 @@ function ChatWindow() {
 
         <div className="chatInput">
           <div className="inputBox">
-            <div className="phone">
-              <FontAwesomeIcon icon={faMicrophone} />
+            <div className="phone" onClick={startSpeech}>
+              <FontAwesomeIcon icon={isTalk?faMicrophoneSlash:faMicrophone} />
             </div>
             <input
               type="text"

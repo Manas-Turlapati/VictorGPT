@@ -25,7 +25,7 @@ let connectDB = async function(){
     }
 }
 app.use("/api", chatRouter);
-app.use("/api/auth",userRouter)
+app.use("/api/auth",userRouter);
 //connecting the port
 
 app.listen(PORT,()=>{

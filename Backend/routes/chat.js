@@ -1,8 +1,18 @@
 const Thread = require("../models/thread.js");
+const fs = require("fs");
 const express = require("express");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: "uploads/",
+  filename: (req, file, cb) => {
+    const ext = file.originalname.split(".").pop();
+    cb(null, Date.now() + "." + ext);
+  },
+});
+const upload = multer({ storage });
 const {verifyToken} = require("../middleware.js");
 const router = express.Router();
-const { getGrokResponse } = require("../utils/grokai.js");
+const { getGrokResponse, getVoiceResponse } = require("../utils/grokai.js");
 router.get("/thread", verifyToken,async (req, res) => {
   try {
     const threads = await Thread.find({user:req.user.id}).sort({ updatedAt: -1 });
@@ -64,6 +74,23 @@ router.post("/chat",verifyToken,async(req,res)=>{
         console.log(err);
         res.status(500).json({error:"something went wrong"});
     }
+})
+
+router.post("/transcribe",verifyToken,upload.single("audio"),async(req,res)=>{
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No audio file provided" });
+    }
+    const audioFile = req.file.path;
+    console.log(audioFile);
+    const text = await getVoiceResponse(audioFile);
+    //after transcription is done delete it
+    fs.unlinkSync(audioFile);
+    res.json({ success: true, transcript: text });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Transcription failed" });
+  }
 })
 // router.post("/test",async(req,res)=>{
 //     try{
