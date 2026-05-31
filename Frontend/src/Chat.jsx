@@ -12,7 +12,7 @@ function Chat(){
       <> 
         {newChat && <h1>Hello! <i>{user}</i> start a new chat!</h1>}
         <div className="chats">
-          {prevMessages.map((el, idx) => {
+          {prevMessages.map((el,idx) => {
             return (
               <div
                 className={el.role === "user" ? "userDiv" : "gptDiv"}
