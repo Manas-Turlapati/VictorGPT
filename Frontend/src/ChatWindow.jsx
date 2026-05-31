@@ -57,20 +57,17 @@ function ChatWindow() {
     }
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(
-        "https://victorgpt-backend.onrender.com/api/chat",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            threadId: currthread ? currthread : threadId,
-            message: prompt,
-          }),
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          threadId: currthread ? currthread : threadId,
+          message: prompt,
+        }),
+      });
       const data = await res.json();
       console.log(data);
       setLoading(false);
@@ -114,11 +111,11 @@ function ChatWindow() {
     try{
       const token = localStorage.getItem("token");
       const res = await fetch(
-        "https://victorgpt-backend.onrender.com/api/transcribe",
+        `${import.meta.env.VITE_BACKEND_URL}/api/transcribe`,
         {
           method: "POST",
           headers: {
-            "authorization": `Bearer ${token}`,
+            authorization: `Bearer ${token}`,
           },
           body: formData,
         },

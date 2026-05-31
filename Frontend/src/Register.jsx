@@ -16,7 +16,7 @@ function Register() {
   async function registerDetails() {
     try {
       const res = await fetch(
-        "https://victorgpt-backend.onrender.com/api/auth/register",
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

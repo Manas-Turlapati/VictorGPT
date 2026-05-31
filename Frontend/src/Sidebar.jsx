@@ -32,7 +32,7 @@ function Sidebar() {
       try {
         const token = localStorage.getItem("token");
         const thread = await fetch(
-          "https://victorgpt-backend.onrender.com/api/thread",
+          `${import.meta.env.VITE_BACKEND_URL}/api/thread`,
           {
             headers: {
               authorization: `Bearer ${token}`, // ← send token
@@ -56,7 +56,7 @@ function Sidebar() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `https://victorgpt-backend.onrender.com/api/thread/${threadId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/thread/${threadId}`,
         {
           headers: {
             authorization: `Bearer ${token}`,
