@@ -51,6 +51,7 @@ router.post("/chat",verifyToken,async(req,res)=>{
     let {threadId,message} = req.body;
     try{
         let thread = await Thread.findOne({threadId:threadId});
+        
         if(!thread){
             thread = new Thread({
                 threadId : threadId,
@@ -64,7 +65,7 @@ router.post("/chat",verifyToken,async(req,res)=>{
                 content:message
             })
         }
-        let response = await getGrokResponse(message);
+        let response = await getGrokResponse(thread.messages);
         thread.messages.push({ role: "assistant", content: response });
         thread.updatedAt = new Date();
         await thread.save();
