@@ -1,7 +1,7 @@
 import "./Register.css";
-import { useState } from "react";
-const valid = require("validator");
+import valid from "validator";
 import toast from "react-hot-toast";
+import { useState } from "react";
 function Register() {
   let [form, setForm] = useState({
     username: "",
@@ -15,15 +15,15 @@ function Register() {
     }));
   }
   async function registerDetails() {
-    if(username===""||email===""||password===""){
+    if(form.username===""||form.email===""||form.password===""){
       toast.error("Please Fill All The Details");
       return;
     }
-    if(!valid.isEmail(email)){
+    if(!valid.isEmail(form.email)){
       toast.error("This email is not valid");
       return;
     }
-    if (password.length < 6) {
+    if (form.password.length < 6) {
       toast.error("Password must be atleast 6 characters!");
       return;
     }
