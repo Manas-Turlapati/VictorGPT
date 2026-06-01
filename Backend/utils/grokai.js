@@ -3,21 +3,15 @@ const fs = require("fs");
 //grok api calling using docs
 const Groq = require("groq-sdk");
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-async function getGroqChatCompletion(userContent) {
+async function getGroqChatCompletion(messages) {
   return groq.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content: userContent,
-      },
-    ],
+    messages: messages,
     model: "llama-3.3-70b-versatile",
   });
 }
-const getGrokResponse = async(message)=>{
+const getGrokResponse = async(messages)=>{
     try{
-      let userContent = message;
-      const chatCompletion = await getGroqChatCompletion(userContent);
+      const chatCompletion = await getGroqChatCompletion(messages);
       let reply = chatCompletion.choices[0].message.content;
       return reply;
     }
