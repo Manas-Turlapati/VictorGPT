@@ -27,8 +27,8 @@ router.get("/thread/:threadId",verifyToken,async (req, res) => {
   try {
     const tId = req.params.threadId;
     const thread = await Thread.findOne({
-      threadId: tId, // ← add this
-      user: req.user.id, // ← keep this for security
+      threadId: tId, 
+      user: req.user.id, 
     });
     if (!thread) return res.status(404).json({ error: "Thread not found" });
     res.json({ success: true, data: thread });
@@ -50,8 +50,10 @@ router.delete("/thread/:threadId",verifyToken, async (req, res) => {
 router.post("/chat",verifyToken,async(req,res)=>{
     let {threadId,message} = req.body;
     try{
-        let thread = await Thread.findOne({threadId:threadId});
-        
+        let thread = await Thread.findOne({
+          threadId: threadId,
+          user: req.user.id,
+        });
         if(!thread){
             thread = new Thread({
                 threadId : threadId,
