@@ -5,12 +5,7 @@ const Groq = require("groq-sdk");
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 async function getGroqChatCompletion(userContent) {
   return groq.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content: userContent,
-      },
-    ],
+    messages: userContent,
     model: "llama-3.3-70b-versatile",
   });
 }
