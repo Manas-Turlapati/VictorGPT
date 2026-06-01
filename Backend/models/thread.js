@@ -1,20 +1,23 @@
 const mongoose = require("mongoose");
 
-let messageSchema = new mongoose.Schema({
-    role:{
-        type:String,
-        enum:["user","assistant"],
-        required:true
+let messageSchema = new mongoose.Schema(
+  {
+    role: {
+      type: String,
+      enum: ["user", "assistant"],
+      required: true,
     },
-    content:{
-        type:String,
-        required:true
+    content: {
+      type: String,
+      required: true,
     },
-    timestamp:{
-        type:Date,
-        default:Date.now
-    }
-});
+    timestamp: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { _id: false },
+);
 let threadSchema = new mongoose.Schema({
   threadId: {
     type: String,
