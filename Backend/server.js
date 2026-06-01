@@ -9,7 +9,7 @@ const { getGrokResponse }= require("./utils/grokai.js");
 const app = express();
 const PORT = 8080;
 app.use(express.json());
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "https://victor-gpt-smoky.vercel.app" }));
 //connecting mongodb with the terminal 
 let connectDB = async function(){
     try{
