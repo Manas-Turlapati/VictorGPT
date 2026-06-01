@@ -1,5 +1,6 @@
 import "./Register.css";
 import { useState } from "react";
+const valid = require("validator");
 import toast from "react-hot-toast";
 function Register() {
   let [form, setForm] = useState({
@@ -14,6 +15,18 @@ function Register() {
     }));
   }
   async function registerDetails() {
+    if(username===""||email===""||password===""){
+      toast.error("Please Fill All The Details");
+      return;
+    }
+    if(!valid.isEmail(email)){
+      toast.error("This email is not valid");
+      return;
+    }
+    if (password.length < 6) {
+      toast.error("Password must be atleast 6 characters!");
+      return;
+    }
     try {
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
