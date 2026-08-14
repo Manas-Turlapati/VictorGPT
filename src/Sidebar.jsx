@@ -50,7 +50,7 @@ function Sidebar() {
 
       try {
         const thread = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/thread`,
+          `/api/thread`,
           {
             headers: {
               authorization: `Bearer ${token}`, // ← send token
@@ -90,7 +90,7 @@ function Sidebar() {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/thread/${threadId}`,
+        `/api/thread/${threadId}`,
         {
           headers: {
             authorization: `Bearer ${token}`,
@@ -126,7 +126,7 @@ function Sidebar() {
 
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/thread/${threadId}`,
+        `/api/thread/${threadId}`,
         {
           method: "DELETE",
           headers: {

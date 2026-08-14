@@ -1,41 +1,16 @@
-# VictorGPT 🤖
+# React + Vite
 
-An AI-powered voice chat application built with React and Node.js.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Live Demo
-[victor-gpt-smoky.vercel.app](https://victor-gpt-smoky.vercel.app)
+Currently, two official plugins are available:
 
-## Features
-- 💬 AI chat powered by Meta's LLaMA3 via Groq API
-- 🎤 Voice to text transcription using Groq Whisper
-- 🔐 JWT authentication
-- 📝 Chat thread history with CRUD operations
-- 📱 Responsive design
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Tech Stack
-**Frontend:** React, React Router, Context API, react-markdown  
-**Backend:** Node.js, Express, MongoDB, Mongoose  
-**Auth:** JWT  
-**AI:** Groq API (LLaMA3 70B + Whisper)  
-**Storage:** Cloudinary, Multer  
-**Deployment:** Vercel (frontend), Render (backend)
+## React Compiler
 
-## Setup
-1. Clone the repo
-2. Backend: `cd Backend && npm install && npm start`
-3. Frontend: `cd Frontend && npm install && npm run dev`
-4. Add `.env` files (see below)
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Environment Variables
-**Backend:**
-ATLASDB_URL, JWT_SECRET, GROQ_API_KEY
-**Frontend:**
-VITE_BACKEND_URL
+## Expanding the ESLint configuration
 
-
-
-## Screenshots:
-<img width="930" height="907" alt="image" src="https://github.com/user-attachments/assets/be013d8b-6494-4129-a0d2-a681318ac7a8" />
-<img width="931" height="906" alt="image" src="https://github.com/user-attachments/assets/9aa5ac4f-48e0-44f2-bbb5-378aa1b171e5" />
-<img width="928" height="907" alt="image" src="https://github.com/user-attachments/assets/bf481abd-50ca-4688-bc0a-754a0ab146c5" />
-
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

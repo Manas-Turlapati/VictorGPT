@@ -40,3 +40,5 @@ connectDB().then(() => {
 //     console.log(err);
 //   }
 // });
+
+module.exports = app;

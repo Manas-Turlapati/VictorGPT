@@ -40,7 +40,7 @@ function Register() {
     setIsSubmitting(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
+        `/api/auth/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

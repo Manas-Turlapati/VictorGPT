@@ -123,7 +123,7 @@ function ChatWindow() {
         return;
       }
 
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/chat`, {
+      const res = await fetch(`/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -177,7 +177,7 @@ function ChatWindow() {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/transcribe`,
+        `/api/transcribe`,
         {
           method: "POST",
           headers: {
