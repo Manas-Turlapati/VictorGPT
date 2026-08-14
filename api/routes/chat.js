@@ -19,7 +19,8 @@ router.get("/thread", verifyToken,async (req, res) => {
     if (!threads) return res.status(404).json({ error: "No threads found" });
     res.json({ success: true, data: threads });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Fetch Threads Error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -33,7 +34,8 @@ router.get("/thread/:threadId",verifyToken,async (req, res) => {
     if (!thread) return res.status(404).json({ error: "Thread not found" });
     res.json({ success: true, data: thread });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Fetch Thread Error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 router.delete("/thread/:threadId",verifyToken, async (req, res) => {
@@ -43,7 +45,8 @@ router.delete("/thread/:threadId",verifyToken, async (req, res) => {
     if (!deleted) return res.status(404).json({ error: "Thread not found" });
     res.json({ success: true, message: "Thread has been deleted" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Delete Thread Error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -86,13 +89,16 @@ router.post("/transcribe",verifyToken,upload.single("audio"),async(req,res)=>{
       return res.status(400).json({ error: "No audio file provided" });
     }
     const audioFile = req.file.path;
-    console.log(audioFile);
-    const text = await getVoiceResponse(audioFile);
-    //after transcription is done delete it
-    fs.unlinkSync(audioFile);
-    res.json({ success: true, transcript: text });
+    console.log("Audio file received:", audioFile);
+    try {
+      const text = await getVoiceResponse(audioFile);
+      res.json({ success: true, transcript: text });
+    } finally {
+      //after transcription is done delete it
+      fs.unlinkSync(audioFile);
+    }
   } catch (err) {
-    console.log(err);
+    console.error("Transcription Error:", err);
     res.status(500).json({ error: "Transcription failed" });
   }
 })

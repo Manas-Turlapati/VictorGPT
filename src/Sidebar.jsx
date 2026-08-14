@@ -27,13 +27,30 @@ function Sidebar() {
     setpendingTask,
     refetch,
     setRefetch,
+    isSidebarOpen,
+    setIsSidebarOpen,
   } = useContext(MyContext);
   useEffect(() => {
     async function fetchData() {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      if (token === "mock-token-123") {
+        const stored = JSON.parse(localStorage.getItem('mockThreads') || '[]');
+        if (stored.length > 0) {
+          setThreads(stored);
+        } else {
+          setThreads([
+            { threadId: "mock-thread-1", title: "Mock Chat 1" },
+            { threadId: "mock-thread-2", title: "Testing UX" }
+          ]);
+        }
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token");
         const thread = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/thread`,
+          `/api/thread`,
           {
             headers: {
               authorization: `Bearer ${token}`, // ← send token
@@ -52,13 +69,28 @@ function Sidebar() {
     fetchData();
   }, [refetch]);
   async function displayInfo(threadId) {
-    setpendingTask("");
+    const token = localStorage.getItem("token");
     setcurrThread(threadId);
-    setprevMessages([]);
+    setview(true);
+    setnewChat(false);
+    if (window.innerWidth <= 768) setIsSidebarOpen(false); 
+
+    if (token === "mock-token-123") {
+        const localMessages = JSON.parse(localStorage.getItem('mockMessages_' + threadId));
+        if (localMessages) {
+            setprevMessages(localMessages);
+        } else {
+            setprevMessages([
+                { role: "user", content: "This is an old mock chat." },
+                { role: "assistant", content: "Yes, I am a mock response from VictorGPT." }
+            ]);
+        }
+        return;
+    }
+
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/thread/${threadId}`,
+        `/api/thread/${threadId}`,
         {
           headers: {
             authorization: `Bearer ${token}`,
@@ -81,11 +113,20 @@ function Sidebar() {
     setview(false);
     setThreadId(uuidv4());
   }
-  async function deleteThread(threadId) {
+  async function deleteThread(threadId, e) {
+    e.stopPropagation();
+    const token = localStorage.getItem("token");
+    
+    if (token === "mock-token-123") {
+      setThreads((prev) => prev.filter((item) => item.threadId !== threadId));
+      if (threadId === threadId) opennewChat();
+      toast.success("Deleted Mock Thread");
+      return;
+    }
+
     try {
-      const token = localStorage.getItem("token");
       const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/thread/${threadId}`,
+        `/api/thread/${threadId}`,
         {
           method: "DELETE",
           headers: {
@@ -103,11 +144,20 @@ function Sidebar() {
   }
   return (
     <>
-      <section>
-        <button className="info" onClick={opennewChat}>
+      <section className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
+        <button className="info">
           <div className="InfoDiv">
-            <FontAwesomeIcon icon={faOpenai} className="logo" />
-            <FontAwesomeIcon icon={faPenToSquare} className="note" />
+            <div className="logo" onClick={() => setview(false)} style={{ display: 'flex', alignItems: 'center' }}>
+              <img 
+                className="hover-glow"
+                src="/victorgpt_logo.jpg" 
+                alt="VictorGPT Logo" 
+                style={{ width: '32px', height: '32px', borderRadius: '6px', objectFit: 'cover', mixBlendMode: 'screen' }} 
+              />
+            </div>
+            <button className="new-chat-btn-sidebar" onClick={opennewChat} style={{ background: 'transparent', border: 'none', padding: 0 }}>
+              <FontAwesomeIcon icon={faPenToSquare} className="note" />
+            </button>
           </div>
         </button>
         <div className="history-block">

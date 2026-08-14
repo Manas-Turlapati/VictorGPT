@@ -7,21 +7,22 @@ const jwt = require("jsonwebtoken");
 router.post("/register",async(req,res)=>{
     try{
         const {username,email,password} = req.body;
-        const existingUser = await User.findOne({username:username});
-        if(!existingUser){
-            const hashedPassword = await bcrypt.hash(password,10);
-            let newUser = await User.create({
-                username:username,
-                password:hashedPassword,
-                email:email
-            });
-            res.json({msg:"User has been added Successfully!"});
-        }else{
-            return res.status(400).json({ msg: "User already exists!" });
+        const existingUsername = await User.findOne({username:username});
+        const existingEmail = await User.findOne({email:email});
+        if(existingUsername || existingEmail){
+            return res.status(400).json({ msg: "User with this username or email already exists!" });
         }
+        const hashedPassword = await bcrypt.hash(password,10);
+        let newUser = await User.create({
+            username:username,
+            password:hashedPassword,
+            email:email
+        });
+        res.json({msg:"User has been added Successfully!"});
     }
     catch(err){
-        res.status(500).json({ error: err.message });
+        console.error("Register Error:", err);
+        res.status(500).json({ error: "Internal Server Error" });
     }   
 })
 router.post("/login",async(req,res)=>{
@@ -46,7 +47,8 @@ router.post("/login",async(req,res)=>{
         }
     }
     catch(err){
-        res.status(500).json({ error: err.message });
+        console.error("Login Error:", err);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 })
 module.exports = router;
