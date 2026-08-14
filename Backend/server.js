@@ -9,7 +9,7 @@ const { getGrokResponse }= require("./utils/grokai.js");
 const app = express();
 const PORT = 8080;
 app.use(express.json());
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
 //connecting mongodb with the terminal 
 let connectDB = async function(){
     try{
@@ -24,9 +24,10 @@ app.use("/api", chatRouter);
 app.use("/api/auth",userRouter);
 //connecting the port
 
-app.listen(PORT,()=>{
-    console.log(`Server Running on ${PORT}!!`);
-    connectDB();
+connectDB().then(() => {
+    app.listen(PORT,()=>{
+        console.log(`Server Running on ${PORT}!!`);
+    });
 });
 
 //post request for calling the open ai or grok api using grok api

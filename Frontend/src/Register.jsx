@@ -2,31 +2,42 @@ import "./Register.css";
 import valid from "validator";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+
 function Register() {
+  const navigate = useNavigate();
   let [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   function displayDetails(e) {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   }
-  async function registerDetails() {
-    if(form.username===""||form.email===""||form.password===""){
+
+  async function registerDetails(e) {
+    e.preventDefault();
+    if (form.username === "" || form.email === "" || form.password === "") {
       toast.error("Please Fill All The Details");
       return;
     }
-    if(!valid.isEmail(form.email)){
+    if (!valid.isEmail(form.email)) {
       toast.error("This email is not valid");
       return;
     }
-    if (form.password.length < 6) {
-      toast.error("Password must be atleast 6 characters!");
+    
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    if (!passwordRegex.test(form.password)) {
+      toast.error("Password must be at least 6 characters, with 1 uppercase and 1 lowercase letter!");
       return;
     }
+
+    setIsSubmitting(true);
     try {
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
@@ -40,6 +51,7 @@ function Register() {
           }),
         },
       );
+      
       const data = await res.json();
       if (!res.ok) {
         toast.error("User already exists! Try logging in");
@@ -48,8 +60,10 @@ function Register() {
           email: "",
           password: "",
         });
+        setIsSubmitting(false);
         return;
       }
+      
       setForm({
         username: "",
         email: "",
@@ -57,17 +71,20 @@ function Register() {
       });
       toast.success("Registered Successfully!");
       setTimeout(() => {
-        window.location.href = "/login";
+        navigate("/login");
       }, 1000);
     } catch (err) {
       console.log(err);
-      toast.error("Something went wrong. Try again!");
+      toast.error("Cannot connect to server. Is the backend running?");
+    } finally {
+      setIsSubmitting(false);
     }
   }
+
   return (
     <>
       <div className="body">
-        <div className="form">
+        <form className="form" onSubmit={registerDetails}>
           <h1>Hello! Please Register!</h1>
           <label htmlFor="username">Enter Your Username:</label>
           <input
@@ -78,8 +95,6 @@ function Register() {
             onChange={displayDetails}
             value={form.username}
           />
-          <br />
-          <br />
           <label htmlFor="email">Enter Your Email:</label>
           <input
             id="email"
@@ -89,8 +104,6 @@ function Register() {
             onChange={displayDetails}
             value={form.email}
           />
-          <br />
-          <br />
           <label htmlFor="password">Enter Password:</label>
           <input
             id="password"
@@ -100,17 +113,16 @@ function Register() {
             onChange={displayDetails}
             value={form.password}
           />
-          <br />
-          <br />
           <p>
-            Already Have An Account?<a href="/login">Login Here!</a>
+            Already Have An Account? <Link to="/login">Login Here!</Link>
           </p>
-          <button type="submit" onClick={registerDetails}>
-            Submit
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
-        </div>
+        </form>
       </div>
     </>
   );
 }
+
 export default Register;

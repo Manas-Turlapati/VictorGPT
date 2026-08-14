@@ -1,18 +1,42 @@
 import "./Login.css";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+
 function Login() {
+  const navigate = useNavigate();
   let [loginform, setloginForm] = useState({
     username: "",
     password: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   function displayDetails(e) {
     setloginForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   }
-  async function loginDetails() {
+
+  async function loginDetails(e) {
+    e.preventDefault();
+    if (loginform.username === "" || loginform.password === "") {
+      toast.error("Please fill in both fields");
+      return;
+    }
+    
+    // MOCK LOGIN FOR TESTING
+    if (loginform.username === "test" && loginform.password === "Test123") {
+      localStorage.setItem("token", "mock-token-123");
+      localStorage.setItem("username", "test");
+      toast.success("Welcome back! (Mock Mode)");
+      setTimeout(() => {
+        navigate("/chat");
+      }, 1000);
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
@@ -25,33 +49,37 @@ function Login() {
           }),
         },
       );
+      
       const data = await res.json();
-      //got the token and username store them in local storage
-      if(!data.token){
+      if (!data.token) {
         toast.error("Username or Password is incorrect!");
         setloginForm({
           username: "",
           password: "",
         });
+        setIsSubmitting(false);
         return;
       }
+      
       localStorage.setItem("token", data.token); 
       localStorage.setItem("username", data.username); 
       toast.success("Welcome back!");
       setTimeout(() => {
-        window.location.href = "/chat";
+        navigate("/chat");
       }, 1000);
     } catch (err) {
       console.log(err);
+      toast.error("Cannot connect to server. Is the backend running?");
+    } finally {
+      setIsSubmitting(false);
     }
   }
+
   return (
     <>
       <div className="body">
-        <div className="login-form">
-          <h1>
-            Welcome back!Please Login!
-          </h1>
+        <form className="login-form" onSubmit={loginDetails}>
+          <h1>Welcome back! Please Login!</h1>
           <label htmlFor="username">Enter Your Username:</label>
           <input
             id="username"
@@ -61,9 +89,6 @@ function Login() {
             value={loginform.username}
             onChange={displayDetails}
           />
-          <br />
-          <br />
-          <br />
           <label htmlFor="password">Enter Password:</label>
           <input
             id="password"
@@ -73,17 +98,16 @@ function Login() {
             value={loginform.password}
             onChange={displayDetails}
           />
-          <br />
-          <br />
           <p>
-            New User? <a href="/register">Register Here!</a>
+            New User? <Link to="/register">Register Here!</Link>
           </p>
-          <button type="submit" onClick={loginDetails}>
-            Submit
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Logging in..." : "Submit"}
           </button>
-        </div>
+        </form>
       </div>
     </>
   );
 }
+
 export default Login;
