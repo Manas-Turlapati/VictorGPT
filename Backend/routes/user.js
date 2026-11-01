@@ -42,7 +42,6 @@ router.post("/login",async(req,res)=>{
               { expiresIn: "7d" },
             );
             res.json({ token, username: existingUser.username });
-            
         }
     }
     catch(err){

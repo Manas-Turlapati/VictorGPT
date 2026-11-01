@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 let messageSchema = new mongoose.Schema(
   {
     role: {
@@ -43,6 +42,5 @@ let threadSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
 const Thread = mongoose.model("Thread",threadSchema); 
 module.exports = Thread;

@@ -167,7 +167,6 @@ function ChatWindow() {
           radius={5} // Changes the roundness of the bar edges (default is 2)
           loading={loading}
         />
-
         <div className="chatInput">
           <div className="inputBox">
             <div className="phone" onClick={startSpeech}>
